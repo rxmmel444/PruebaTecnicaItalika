@@ -21,8 +21,6 @@ import com.pruebaItalika.service.ProductosServiceImpl;
 @RequestMapping("/api/productos")
 public class ProductosController {
 	
-	
-
     @Autowired
     private ProductosServiceImpl productoService; 
 
@@ -30,11 +28,14 @@ public class ProductosController {
     @GetMapping
     public ResponseEntity<List<ProductosDTO>> obtenerProductos() {
         List<ProductosDTO> productos = productoService.obtenerProductos();
+
         if (productos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(productos, HttpStatus.OK);  
+
+        return new ResponseEntity<>(productos, HttpStatus.OK);
     }
+    
 
 
     @GetMapping("/{id}")
@@ -55,12 +56,24 @@ public class ProductosController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> actualizarProducto(@PathVariable Long id, @RequestBody ProductosDTO productosDTO) {
-        productoService.actualizarProducto(id, productosDTO.getNombreP(), productosDTO.getDescripcion(),
-                productosDTO.getPrecio(), productosDTO.getCantidad(), productosDTO.getEstado());
-        return new ResponseEntity<>(HttpStatus.OK); 
+    public ResponseEntity<String> actualizarProducto(@PathVariable Long id, @RequestBody ProductosDTO productosDTO) {
+        try {
+            productoService.actualizarProducto(id, 
+                                               productosDTO.getNombreP(),
+                                               productosDTO.getDescripcion(),
+                                               productosDTO.getPrecio(),
+                                               productosDTO.getCantidad(),
+                                               productosDTO.getEstado());
+            return ResponseEntity.ok("Producto actualizado exitosamente.");
+        } catch (IllegalStateException ex) {
+  
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        } catch (Exception e) {
+           
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
+        }
     }
-
+    
   
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
