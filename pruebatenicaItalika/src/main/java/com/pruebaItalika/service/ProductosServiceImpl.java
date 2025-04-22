@@ -72,7 +72,7 @@ public class ProductosServiceImpl implements ProductoService{
     	 Productos producto = productosRepository.findById(id)
     	            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     	    
-    	    // Verificar si el producto está en estado de bloqueo lógico (por ejemplo, estado = 0)
+    	
     	    if (producto.getEstado() == 1) {
     	        throw new IllegalStateException("No se puede actualizar el producto porque está bloqueado");
     	    }
