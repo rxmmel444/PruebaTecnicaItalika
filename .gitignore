@@ -1,0 +1,17 @@
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+
+# Gradle
+.gradle/
+build/
+
+# Logs y temporales
+*.log
+*.tmp
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
